@@ -12,7 +12,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+            background: #000;
             overflow: hidden;
             font-family: 'Arial', sans-serif;
         }
@@ -25,7 +25,6 @@
         .text {
             color: #ffffff;
             text-shadow: 0 0 20px #fff;
-            animation: textGlow 2s ease-in-out infinite;
         }
 
         .year {
@@ -33,52 +32,64 @@
             font-weight: bold;
             background: linear-gradient(45deg, #ff6b6b, #ffd93d, #6c5ce7);
             -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            margin: 0;
+            -webkit-text-fill-color: transparent;
+            animation: colorChange 5s infinite;
         }
 
         .greeting {
             font-size: 2.5em;
-            margin: 10px 0;
+            margin: 20px 0;
+            animation: pulse 2s infinite;
         }
 
         .japanese {
             font-size: 2em;
-            margin: 10px 0;
+            margin: 20px 0;
+            animation: glow 2s infinite;
         }
 
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
+        .company-name {
+            font-size: 2em;
+            margin: 20px 0;
+            color: #007bff;
+            text-shadow: 0 0 20px #0056b3;
+            animation: blueGlow 2s infinite;
         }
 
-        @keyframes textGlow {
-            0%, 100% { text-shadow: 0 0 20px #fff; }
-            50% { text-shadow: 0 0 30px #fff, 0 0 40px #ff6b6b; }
+        @keyframes colorChange {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes glow {
+            0% { text-shadow: 0 0 10px #fff; }
+            50% { text-shadow: 0 0 20px #fff, 0 0 30px #ff6b6b; }
+            100% { text-shadow: 0 0 10px #fff; }
+        }
+
+        @keyframes blueGlow {
+            0% { text-shadow: 0 0 10px #007bff; }
+            50% { text-shadow: 0 0 20px #007bff, 0 0 30px #00ff00; }
+            100% { text-shadow: 0 0 10px #007bff; }
         }
 
         .firework {
             position: absolute;
-            width: 4px;
-            height: 4px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            transform-origin: center;
-        }
-
-        @keyframes shoot {
-            0% { transform: translateY(100vh) scale(0); }
-            50% { transform: translateY(50vh) scale(1); }
-            100% { transform: translateY(0) scale(0); opacity: 0; }
+            animation: explode 1s ease-out forwards;
         }
 
         @keyframes explode {
             0% { transform: scale(1); opacity: 1; }
-            100% { transform: scale(2); opacity: 0; }
+            100% { transform: scale(30); opacity: 0; }
         }
     </style>
 </head>
@@ -86,59 +97,26 @@
     <div class="container">
         <h1 class="text year animate__animated animate__bounceIn">2025</h1>
         <div class="text greeting animate__animated animate__fadeInUp">Happy New Year</div>
-        <div class="text japanese animate__animated animate__fadeInUp animate__delay-1s">明けましておめでとう</div>
+        <div class="text japanese animate__animated animate__fadeInUp animate__delay-1s">良いお年をお迎えください、みんな！</div>
+        <div class="company-name animate__animated animate__fadeInUp animate__delay-2s">GrowthXPartners</div>
     </div>
 
     <script>
         function createFirework() {
+            const colors = ['#ff6b6b', '#ffd93d', '#6c5ce7', '#ff9f43', '#00cec9'];
             const firework = document.createElement('div');
             firework.className = 'firework';
-
-            // Random position
-            const startX = Math.random() * window.innerWidth;
-            firework.style.left = startX + 'px';
-
-            // Random color
-            const hue = Math.random() * 360;
-            firework.style.backgroundColor = `hsl(${hue}, 100%, 50%)`;
-
-            // Random animation duration
-            const duration = 1 + Math.random();
-            firework.style.animation = `shoot ${duration}s ease-out forwards`;
-
+            firework.style.left = Math.random() * window.innerWidth + 'px';
+            firework.style.top = Math.random() * window.innerHeight + 'px';
+            firework.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
             document.body.appendChild(firework);
 
             setTimeout(() => {
                 firework.remove();
-            }, duration * 1000);
+            }, 1000);
         }
 
-        // Create fireworks periodically
-        setInterval(createFirework, 300);
-
-        // Create stars background
-        function createStars() {
-            const stars = document.createElement('div');
-            stars.className = 'stars';
-
-            for(let i = 0; i < 100; i++) {
-                const star = document.createElement('div');
-                star.style.position = 'absolute';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.width = '2px';
-                star.style.height = '2px';
-                star.style.backgroundColor = 'white';
-                star.style.borderRadius = '50%';
-                star.style.opacity = Math.random();
-                star.style.animation = `twinkle ${1 + Math.random() * 4}s infinite`;
-                stars.appendChild(star);
-            }
-
-            document.body.appendChild(stars);
-        }
-
-        createStars();
+        setInterval(createFirework, 200);
     </script>
 </body>
 </html>
